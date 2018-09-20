@@ -23,6 +23,7 @@ default = ["logging"]
 logging = ["log"]
 dangerous_configuration = []
 quic = []
+pub-secrets = []
 
 [dev-dependencies]
 env_logger = "0.6.1"

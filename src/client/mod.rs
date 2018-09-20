@@ -1,6 +1,6 @@
 use crate::msgs::enums::CipherSuite;
 use crate::msgs::enums::{AlertDescription, HandshakeType};
-use crate::session::{Session, SessionCommon};
+use crate::session::{Session, SessionCommon, SessionSecrets};
 use crate::keylog::{KeyLog, NoKeyLog};
 use crate::suites::{SupportedCipherSuite, ALL_CIPHERSUITES};
 use crate::msgs::handshake::CertificatePayload;
@@ -628,6 +628,16 @@ impl ClientSession {
 }
 
 impl Session for ClientSession {
+    #[cfg(feature = "pub-secrets")]
+    fn get_secrets(&self) -> Option<&SessionSecrets> {
+        self.imp.common.secrets.as_ref()
+    }
+
+    #[cfg(feature = "pub-secrets")]
+    fn get_seq(&self) -> (u64, u64) {
+        (self.imp.common.read_seq, self.imp.common.write_seq)
+    }
+
     fn read_tls(&mut self, rd: &mut io::Read) -> io::Result<usize> {
         self.imp.common.read_tls(rd)
     }
